@@ -1,0 +1,6 @@
+migration :
+**********
+it is used for create database schema
+command: php artisan make:model 
+
+ php artisan make:model todo -mcr
