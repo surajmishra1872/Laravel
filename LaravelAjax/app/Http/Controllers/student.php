@@ -120,13 +120,24 @@ class student extends Controller
         else
         {
            $student=StudentReg::find($id);
-           $student->name=$request->input('name');
-           $student->name=$request->input('email');
-           $student->update();
-                return response()->json([
-                'status'=>200,
-                'message'=>"Student updated Successfully",
-            ]);
+
+           if($student)
+           {
+            $student->name=$request->input('name');
+            $student->name=$request->input('email');
+            $student->update();
+                 return response()->json([
+                 'status'=>200,
+                 'message'=>"Student updated Successfully",
+             ]); 
+           }
+           else
+           {
+               return response()->json([
+                   'status'=>400,
+                   'message'=>"Student Data Not Updated",
+               ]);
+           }
         }
     }
 

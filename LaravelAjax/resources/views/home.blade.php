@@ -224,19 +224,45 @@
 
          //update records
 
-$("#edit-button").on("click",".update_student",function(e){
+$(document).on("click",".update_student",function(e){
                 e.preventDefault();
                 var studentid=$("#edit_stu_id").val()
                 var data = {
                      'name': $('.edit_name').val(),
                      'email': $('.edit_email').val(),
                    }
+                   $.ajaxSetup({
+                    headers: {
+                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                  });
                   $.ajax({
-                  type: "POST",
+                  type: "PUT",
                   url: "/student/"+studentid,
                   data :data,
                   dataType:"json",
                   success: function(response) {
+                    console.log(response);
+                    if(response.status==400){
+                      $('#errorlist').html(" ");
+                      $('#errorlist').addClass("alert alert-danger");
+                      $.each(response.message,function(key,err_val){
+                      $('#errorlist').append('<li>'+response.message+'</li>');
+                      });
+                    }
+                    else if(response.status==404){
+                      $('#errorlist').html(" ");
+                      $('#errorlist').addClass("alert alert-success");
+                      $('#errorlist').append('<li>'+response.message+'</li>');
+                    }
+                    else
+                    {
+                      $('#errorlist').html(" ");
+                      $('#errorlist').addClass("alert alert-success");
+                      $('#errorlist').append('<li>'+response.message+'</li>');
+                      $('#EditStudentModal').modal('hide');
+                      loadTable(); 
+                    }
                     
                   }
                   });              
